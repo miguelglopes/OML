@@ -1,6 +1,17 @@
-# Prever Diabetes
+Este repositório descreve o processo de treino, implementação e operacionalização de modelos de Machine Learning para prever a probabilidade de um indivíduo ter diabetes. Contém instruções detalhadas sobre como utilizar o MLFlow e a FastAPI para servir os modelos, bem como informações sobre testes e ferramentas auxiliares.
 
-Esta aplicação usa os dados contidos na pasta `data` para treinar modelos de machine learning para prever a probabilidade de um indíviduo ter diabetes.
+Estes ficheiros e pastas são utilizados no âmbido do curso Operacionalização de Machine Learning. Os slides podem ser obtidos [daqui](https://docs.google.com/presentation/d/1nJI_xrpfoA2itFLAVaF9O4SjYUerUkByfPSLog04lEo/edit?usp=sharing).
+
+
+# Índice
+- [Prever Diabetes](#prever-diabetes)
+    - [Modelos](#modelos)
+    - [Webservice](#webservice)
+    - [UI](#ui)
+    - [Tests](#tests)
+- [Comandos Úteis](#comandos-úteis)
+
+# Prever Diabetes
 
 ## Modelos
 
@@ -27,21 +38,21 @@ export MLFLOW_TRACKING_URI=./mlruns/local
 mlflow models serve -m models:/logistic_reg/1 --port=5001 --no-conda
 ```
 
-O nome do modelo (logistic_reg) e a versão do modelo (1) devem ser substituidos pelo nome com que o modelo foi registado e a versão do mesmo a ser utilizada, respetivamente.
+O nome do modelo (logistic_reg) e a versão do modelo (1) devem ser substituídos pelo nome com que o modelo foi registado e a versão do mesmo a ser utilizada, respetivamente.
 
-Este funcionalidade de mlflow utiliza a especificação de ambiente criada automaticamente pelo mlflow para o modelo, para criar um ambiente de conda para o modelo e servir o modelo isolado nesse ambiente virtual de conda.
+Esta funcionalidade do mlflow utiliza a especificação de ambiente criada automaticamente pelo mlflow para o modelo, para criar um ambiente de conda para o modelo e servir o modelo isolado nesse ambiente virtual de conda.
 
-Esta API expõe o endpoint `/invocations` na qual espera receber as features de input do modelo, e retorna a previsão dada pelo modelo. Para testar a API basta correr o notebook `test_requests.ipynb` na secção de `mlflow serve`.
+Esta API expõe o endpoint `/invocations` na qual espera receber as features de input do modelo e retorna a previsão dada pelo modelo. Para testar a API basta correr o notebook `test_requests.ipynb` na secção de `mlflow serve`.
 
 ### Com a FastAPI
 
-No python script `src\app\main.py` foi desenvolvida uma applicação simples com a fastapi.
+No python script `src\app\main.py` foi desenvolvida uma aplicação simples com a fastapi.
 
-O nome e a versão do modelo registado a ser utilizado na app tem que ser especificado no ficheiro de configuração presente na diretoria `config` no fichiro `app.json`.
+O nome e a versão do modelo registado a ser utilizado na app tem que ser especificado no ficheiro de configuração presente na diretoria `config` no ficheiro `app.json`.
 
 Esta app expõe o endpoint `/predict` na qual espera receber as features de input do modelo (em formato json, no body do pedido) e retorna a previsão dada pelo modelo.
 
-Para correr a app: com o ambiente deste projeto activo, na raiz do projeto (pasta rumos), executar o comando em baixo
+Para correr a app: com o ambiente deste projeto ativo, na raiz do projeto (pasta rumos), executar o comando abaixo:
 
 ```
 python ./src/app/main.py
@@ -49,38 +60,36 @@ python ./src/app/main.py
 
 Para testar se o modelo ficou corretamente exposto na app, temos 2 opções:
 - http://127.0.0.1:5002/docs
-- correr a secção `FastAPI` do notebook `test_requests.ipynb` ou então podemos utilizar o pagina html presente na diretoria `frontend` deste projeto e realizar um pedido (e ver a resposta) através desse frontend.
+- Correr a secção `FastAPI` do notebook `test_requests.ipynb` ou então podemos utilizar a página html presente na diretoria `frontend` deste projeto e realizar um pedido (e ver a resposta) através desse frontend.
 
-### UI
+## UI
 
 Para adicionar uma UI ao nosso webservice da FastApi, apenas necessitamos de abrir o ficheiro `frontend/form.html` num browser.
 
 ## Tests
 
-Para testarmos o nosso modelo registado utilizou se a framework de Python `pytest`.
+Para testarmos o nosso modelo registado utilizou-se a framework de Python `pytest`.
 
 Os testes estão presentes no script de Python `tests\random_forest\test_rf_out.py`:
 
-* `test_model_out`: testa o output do modelo, e verifica se coincide com com o output esperado
-* `test_model_out_shape`: test se a shape do output do modelo coincide com a shape esperada
+* `test_model_out`: testa o output do modelo e verifica se coincide com o output esperado
+* `test_model_out_shape`: testa se a shape do output do modelo coincide com a shape esperada
 
-Para se correr estes testes: com o ambiente deste projeto activo, na raiz do projeto (pasta rumos) executar o comando em baixo
+Para correr estes testes: com o ambiente deste projeto ativo, na raiz do projeto (pasta rumos), executar o comando abaixo:
 
 ```
 python -m pytest tests
 ```
 
-# Slides
-[Slides das aulas.](https://docs.google.com/presentation/d/1nJI_xrpfoA2itFLAVaF9O4SjYUerUkByfPSLog04lEo/edit?usp=sharing)
-
-# Comandos Úteis para o Módulo de Operacionalização de ML
+# Comandos Úteis
 
 ## Anaconda
 
 Instalar: https://docs.anaconda.com/miniconda/miniconda-install/
 
-Nota: em windows, para o comando `conda` ficar a funcionar correctamente em qualquer janela, têm de abrir o anaconda prompt e correr `conda init`. A partir desse momento podem fechar o anaconda prompt, reiniciar todos os terminais e usar o terminal normal do windows para correr comandos do `conda`.
-Nota 2: em windows, poderá ser necessário executar o comando `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` na powershell caso não estejam autorizados a correr comandos na consola.
+Nota: Em Windows, para o comando `conda` funcionar corretamente em qualquer janela, devem abrir o Anaconda Prompt e correr `conda init`. A partir desse momento, podem fechar o Anaconda Prompt, reiniciar todos os terminais e usar o terminal normal do Windows para correr comandos do `conda`.
+
+Nota 2: Em Windows, poderá ser necessário executar o comando `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` na PowerShell caso não estejam autorizados a correr comandos na consola.
 
 `conda create -n <env-name> python=<python-version>`: comando utilizado para criar um novo ambinete de anaconda com a versão `<python-version>` (que deverá ser substituido pela versão do Python que queremos usar) do Python e com o nome `<env-name>`(que deverá ser substituido pelo nome que queremos dar ao ambiente). [Link para a documentação do conda](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands)
 
@@ -96,35 +105,35 @@ Nota 2: em windows, poderá ser necessário executar o comando `Set-ExecutionPol
 
 `conda env create -f conda.yaml`: comando utilizado para criar um ambiente do Anaconda a partir de um ficheiro que contenha a especificação de um ambiente do Anaconda. Este novo ambiente ficará com o nome que está especificado no ficheiro. Para usar um outro nome basta adicionar ao comando `-n <env-name>` (substituindo `<env-name>` pelo nome qu querem que fique). [Link para a documentação do conda](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file)
 
-## Pip
-
-`pip install <package>`: Instala o `<package>` (deverá ser substituído pelo pacote a instalar, por exemplo `pandas` se quisermos instalar o pandas) no ambiente de conda activo
-
-`pip list --format=freeze > requirements.txt`: Escreve um ficheiro de `requirements.txt` com os pacotes (e a sua versão) instalados no ambiente de conda activo
-
-`pip install -r requirements.txt`: Instala os pacotes especificados no ficheiro de `requirements.txt`
-
-`pip --version`: Imprime informação sobre a version do pip.
 
 ## Jupyter
 
-Para isntalar e correr, numa consola correr:
+Para instalar e correr, numa consola correr:
 
-`conda install jupyter`
-
-`jupyter lab`
+```
+conda install jupyter
+jupyter lab
+```
 
 Para registar o venv, correr numa consola:
 
-`python -m ipykernel install --user --name=OML`
+```
+python -m ipykernel install --user --name=OML
+```
 
 ## MLFlow
 
-Inicializar a ui: `mlflow ui --backend-store-uri ./mlruns/local`
+Inicializar a UI:
 
+```
+mlflow ui --backend-store-uri ./mlruns/local
+```
 
 ## Windows
 
 Por padrão, o Windows bloqueia a execução de scripts não assinados no PowerShell. Pode-se alterar essa configuração com:
 
-`Set-ExecutionPolicy Unrestricted -Scope LocalMachine -Force`
+```
+Set-ExecutionPolicy Unrestricted -Scope LocalMachine -Force
+```
+
