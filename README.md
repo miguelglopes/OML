@@ -70,6 +70,8 @@ Para se correr estes testes: com o ambiente deste projeto activo, na raiz do pro
 python -m pytest tests
 ```
 
+# Slides
+[Slides das aulas.](https://docs.google.com/presentation/d/1nJI_xrpfoA2itFLAVaF9O4SjYUerUkByfPSLog04lEo/edit?usp=sharing)
 
 # Comandos Úteis para o Módulo de Operacionalização de ML
 
