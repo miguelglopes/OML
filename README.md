@@ -28,13 +28,13 @@ Para expor uma api utilizando a funcionalidade de serving do mlflow basta correr
 
 Windows (psh):
 ```
-$env:MLFLOW_TRACKING_URI="./mlruns/local"
+$env:MLFLOW_TRACKING_URI="./mlruns"
 mlflow models serve -m models:/logistic_reg/1 --port=5001 --no-conda
 ```
 
 Linux:
 ```
-export MLFLOW_TRACKING_URI=./mlruns/local
+export MLFLOW_TRACKING_URI=./mlruns
 mlflow models serve -m models:/logistic_reg/1 --port=5001 --no-conda
 ```
 
@@ -42,7 +42,7 @@ O nome do modelo (logistic_reg) e a versão do modelo (1) devem ser substituído
 
 Esta funcionalidade do mlflow utiliza a especificação de ambiente criada automaticamente pelo mlflow para o modelo, para criar um ambiente de conda para o modelo e servir o modelo isolado nesse ambiente virtual de conda.
 
-Esta API expõe o endpoint `/invocations` na qual espera receber as features de input do modelo e retorna a previsão dada pelo modelo. Para testar a API basta correr o notebook `test_requests.ipynb` na secção de `mlflow serve`.
+Esta API expõe o endpoint `/invocations` na qual espera receber as features de input do modelo e retorna a previsão dada pelo modelo. Para testar a API basta correr o notebook `test_requests.ipynb`, na secção de `mlflow serve`.
 
 ### Com a FastAPI
 
@@ -126,7 +126,7 @@ python -m ipykernel install --user --name=OML
 Inicializar a UI:
 
 ```
-mlflow ui --backend-store-uri ./mlruns/local
+mlflow ui --backend-store-uri ./mlruns
 ```
 
 ## Windows

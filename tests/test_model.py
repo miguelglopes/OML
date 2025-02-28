@@ -5,7 +5,7 @@ import mlflow
 
 @pytest.fixture(scope="module")
 def model() -> mlflow.pyfunc.PyFuncModel:
-    mlflow.set_tracking_uri("./mlruns/local")
+    mlflow.set_tracking_uri("./mlruns")
     model_name = "logistic_reg"
     model_version = 1
     return mlflow.pyfunc.load_model(

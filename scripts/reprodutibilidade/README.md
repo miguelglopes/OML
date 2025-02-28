@@ -8,7 +8,7 @@
 
 1. Criar um novo ambiente virtual usando o conda, chamado OML 
 ```
-conda create -n OML python=3.11
+conda create -n OML python=3.12
 ```
 2. Ativar o ambiente acabado de criar
 ```
@@ -23,7 +23,7 @@ conda install pandas numpy scikit-learn
 
 5. De forma a tornar a minha experiência reproduzível, preciso de exportar o meu ambiende para um ficheiro conda.yaml:
 ```
-conda env export --no-builds --file conda.yml
+conda env export --file conda.yml
 ```
 
 5. Agora que temos o ficheiro conda.yml, conseguimos facilmente recriar o nosso ambiente em qualquer altura. Por isso vamos desativar e eliminar o ambiente que acabamos de criar:
