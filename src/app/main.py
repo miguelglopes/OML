@@ -7,6 +7,10 @@ import pandas as pd
 import json
 import uvicorn
 
+# Load the application configuration
+with open('./config/app.json') as f:
+    config = json.load(f)
+
 
 # Define the inputs expected in the request body as JSON
 class Request(BaseModel):
@@ -52,18 +56,14 @@ async def startup_event():
     Configures the tracking URI for MLflow to locate the model metadata
     in the local mlruns directory.
     """
-    mlflow.set_tracking_uri("./mlruns")
-    
-    # Load the application configuration
-    with open('./config/app.json') as f:
-        config = json.load(f)
+        
+    mlflow.set_tracking_uri(config['tracking_uri'])
 
     # Load the registered model specified in the configuration
-    app.model = mlflow.pyfunc.load_model(
-        model_uri=f"models:/{config['model_name']}/{config['model_version']}"
-    )
+    model_uri = f"models:/{config['model_name']}@{config['model_version']}"
+    app.model = mlflow.pyfunc.load_model(model_uri = model_uri)
     
-    print(f"Loaded model {config['model_name']}/{config['model_version']}")
+    print(f"Loaded model {model_uri}")
 
 
 @app.post("/has_diabetes")
@@ -79,7 +79,7 @@ async def predict(input: Request):
     """
 
     # Build a DataFrame from the request data
-    input_df = pd.DataFrame.from_dict({k: [v] for k, v in input.dict().items()})
+    input_df = pd.DataFrame.from_dict({k: [v] for k, v in input.model_dump().items()})
 
     # Predict using the model and retrieve the first item in the prediction list
     prediction = app.model.predict(input_df)
@@ -88,4 +88,4 @@ async def predict(input: Request):
     return {"prediction": prediction.tolist()[0]}
 
 # Run the app on port 5003
-uvicorn.run(app=app, port=5003)
+uvicorn.run(app=app, port=config["port"])
