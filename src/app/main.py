@@ -88,4 +88,4 @@ async def predict(input: Request):
     return {"prediction": prediction.tolist()[0]}
 
 # Run the app on port 5003
-uvicorn.run(app=app, port=config["port"])
+uvicorn.run(app=app, port=config["service_port"], host="0.0.0.0")

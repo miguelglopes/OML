@@ -5,8 +5,8 @@ import requests
 with open('./config/app.json') as f:
     config = json.load(f)
 
-BASE_URL = "http://localhost"
-PORT = config["port"]
+BASE_URL = config["service_base_url"]
+PORT = config["service_port"]
 
 def test_has_diabetes_prediction():
     """

@@ -1,11 +1,13 @@
 services:
+
   mlflow-tracking-server:
-    container_name: mlflow-tracking
     image: ghcr.io/mlflow/mlflow
     command: mlflow ui --port 5000 --host 0.0.0.0 --backend-store-uri ./mlruns --artifacts-destination ./mlruns
     volumes:
       - ./mlruns:/mlruns
-    network_mode: host
+    container_name: mlflow-tracking
+    ports:
+      - 5000:5000
 
   diabetes-prediction-service:
     build:
@@ -16,9 +18,10 @@ services:
         - ghcr.io/miguelglopes/oml_app:latest
     image: diabetes-prediction-service
     container_name: diabetes-prediction-service
-    network_mode: host
+    ports:
+      - 5002:5002
 
-  diabetes-prediction-ui:
+  diabetes-predition-ui:
     build:
       context: .
       dockerfile: Dockerfile.UI
@@ -27,4 +30,5 @@ services:
         - ghcr.io/miguelglopes/oml_ui:latest
     image: diabetes-prediction-ui
     container_name: diabetes-prediction-ui
-    network_mode: host
+    ports:
+      - 5003:5003

@@ -89,60 +89,74 @@
     </div>
 
     <script>
-
-        // Populate form fields with default values
+        // Read config from config/app.json, then configure the form.
         document.addEventListener('DOMContentLoaded', function() {
-            const defaultValues = {
-                "Pregnancies": 6,
-                "Glucose": 115,
-                "BloodPressure": 60,
-                "SkinThickness": 39,
-                "Insulin": 0,
-                "BMI": 33.7,
-                "DiabetesPedigreeFunction": 0.245,
-                "Age": 40
-            };
+            fetch('config/app.json')
+                .then(response => response.json())
+                .then(config => {
+                    // Construct the diabetes prediction endpoint URL
+                    const serviceUrl = `${config.service_base_url}:${config.service_port}/has_diabetes`;
 
-            Object.keys(defaultValues).forEach(key => {
-                const input = document.getElementById(key);
-                if (input) {
-                    input.value = defaultValues[key];
-                }
-            });
-        });
+                    // Populate default values
+                    const defaultValues = {
+                        "Pregnancies": 6,
+                        "Glucose": 115,
+                        "BloodPressure": 60,
+                        "SkinThickness": 39,
+                        "Insulin": 0,
+                        "BMI": 33.7,
+                        "DiabetesPedigreeFunction": 0.245,
+                        "Age": 40
+                    };
 
-        document.getElementById('predictDiabetes').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-            fetch('http://127.0.0.1:5002/has_diabetes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                const resultDiv = document.getElementById('result');
-                if (data.prediction === 1) {
-                    resultDiv.innerHTML = 'You are at risk of diabetes. &#x1F625;'; // Red sad face emoji
-                    resultDiv.style.color = 'red';
-                } else if (data.prediction === 0) {
-                    resultDiv.innerHTML = 'You are not at risk of diabetes. &#x1F600;'; // Green smiling face emoji
-                    resultDiv.style.color = 'green';
-                } else {
-                    resultDiv.innerHTML = 'Error: Unable to predict. &#x1F914;'; // Thinking face emoji
-                    resultDiv.style.color = 'black';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                    Object.keys(defaultValues).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input) {
+                            input.value = defaultValues[key];
+                        }
+                    });
+
+                    document.getElementById('predictDiabetes').addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        const form = event.target;
+                        const formData = new FormData(form);
+                        const data = {};
+
+                        formData.forEach((value, key) => {
+                            data[key] = value;
+                        });
+
+                        fetch(serviceUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            const resultDiv = document.getElementById('result');
+                            if (data.prediction === 1) {
+                                resultDiv.innerHTML = 'You are at risk of diabetes. &#x1F625;'; // Sad face
+                                resultDiv.style.color = 'red';
+                            } else if (data.prediction === 0) {
+                                resultDiv.innerHTML = 'You are not at risk of diabetes. &#x1F600;'; // Smiling face
+                                resultDiv.style.color = 'green';
+                            } else {
+                                resultDiv.innerHTML = 'Error: Unable to predict. &#x1F914;'; // Thinking face
+                                resultDiv.style.color = 'black';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error occurred while fetching prediction. Check console for details.');
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading config file:', error);
+                    alert('Failed to load configuration. Please check console for details.');
+                });
         });
     </script>
 </body>

@@ -1,6 +1,7 @@
 {
     "model_name": "logistic_reg",
     "model_version": "champion",
-    "tracking_uri": "http://localhost:5000",
-    "port": 5002
+    "tracking_uri": "http://mlflow-tracking-server:5000",
+    "service_base_url": "http://diabetes-prediction-service",
+    "service_port": 5002
 }

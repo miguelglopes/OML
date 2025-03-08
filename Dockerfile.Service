@@ -14,5 +14,7 @@ RUN conda env create -f conda.yaml
 COPY config config
 COPY src src
 
+EXPOSE 5002
+
 # Executa a aplicação FastAPI
 CMD conda run --no-capture-output -n OML python src/app/main.py
