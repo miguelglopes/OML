@@ -21,7 +21,7 @@ services:
     ports:
       - 5002:5002
 
-  diabetes-predition-ui:
+  diabetes-prediction-ui:
     build:
       context: .
       dockerfile: Dockerfile.UI
