@@ -24,7 +24,7 @@ def test_model_out(model: mlflow.pyfunc.PyFuncModel):
         'SkinThickness': 60,
         'Insulin': 110,
         'BMI': 20.0,
-        'DiabetesPedigreeFunction': 0.963,
+        'DiabetesPedigreeFunction': 0.962,
         'Age': 20
     }])
     prediction = model.predict(data=input)
