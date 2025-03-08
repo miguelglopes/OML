@@ -8,7 +8,7 @@ import mlflow
 def model() -> mlflow.pyfunc.PyFuncModel:
     with open('./config/app.json') as f:
         config = json.load(f)
-    mlflow.set_tracking_uri(config["tracking_uri"])
+    mlflow.set_tracking_uri(f"http://localhost:{config['tracking_port']}")
     model_name = config["model_name"]
     model_version = config["model_version"]
     return mlflow.pyfunc.load_model(

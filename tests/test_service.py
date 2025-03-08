@@ -5,15 +5,12 @@ import requests
 with open('./config/app.json') as f:
     config = json.load(f)
 
-BASE_URL = config["service_base_url"]
-PORT = config["service_port"]
-
 def test_has_diabetes_prediction():
     """
     Test for the /has_diabetes endpoint with valid input data.
     It should return a prediction in the response.
     """
-    response = requests.post(f"{BASE_URL}:{PORT}/has_diabetes", json={
+    response = requests.post(f"http://localhost:{config["service_port"]}/has_diabetes", json={
         'Pregnancies': 0,
         'Glucose': 30,
         'BloodPressure': 88,
